@@ -13,19 +13,9 @@ class ShopifyClientNonOAuth extends ShopifyClient
     private $shopName;
     private $httpClient;
 
-    private static $resources = [
-        "order",
-        "fulfillment",
-        "checkout",
-        "fulfillment_event",
-        "product",
-        "shop",
-        "variant"
-    ];
-
     public function __construct($apiKey, $secretKey, $shopName)
     {
-        foreach (self::$resources as $resource) {
+        foreach ($this->resources() as $resource) {
             $className = 'Shopify\Shopify' . str_replace("_", "", ucwords($resource, "_"));
             $this->{$resource . "s"} = new $className($this);
         }

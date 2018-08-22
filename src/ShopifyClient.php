@@ -12,19 +12,23 @@ class ShopifyClient
     private $shopName;
     private $httpClient;
 
-    private static $resources = [
-        "order",
-        "fulfillment",
-        "checkout",
-        "fulfillment_event",
-        "product",
-        "shop",
-        "variant"
-    ];
+    protected function resources ()
+    {
+        return [
+            "order",
+            "fulfillment",
+            "checkout",
+            "fulfillment_event",
+            "product",
+            "shop",
+            "variant",
+            "location",
+        ];
+    }
 
     public function __construct($accessToken, $shopName)
     {
-        foreach (self::$resources as $resource) {
+        foreach ($this->resources() as $resource) {
             $className = 'Shopify\Shopify' . str_replace("_", "", ucwords($resource, "_"));
             $this->{$resource . "s"} = new $className($this);
         }
