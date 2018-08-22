@@ -1,5 +1,5 @@
 {
-  "name": "shopify/shopify-php",
+  "name": "shippinno/shopify-php",
   "description": "PHP library for the Shopify API",
   "require": {
     "php": ">=5.5.9",
