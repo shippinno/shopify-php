@@ -23,6 +23,7 @@ class ShopifyClient
             "shop",
             "variant",
             "location",
+            "inventory_level",
         ];
     }
 
