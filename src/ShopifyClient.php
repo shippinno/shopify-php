@@ -6,11 +6,29 @@
 
 namespace Shopify;
 
+use Psr\Log\LoggerInterface;
+
 class ShopifyClient
 {
-    private $accessToken;
-    private $shopName;
-    private $httpClient;
+    /**
+     * @var string
+     */
+    protected $shopName;
+
+    /**
+     * @var string|null
+     */
+    private $accessToken = null;
+
+    /**
+     * @var
+     */
+    protected $httpClient;
+
+    /**
+     * @var LoggerInterface|null
+     */
+    protected $logger;
 
     protected function resources ()
     {
@@ -27,13 +45,13 @@ class ShopifyClient
         ];
     }
 
-    public function __construct($accessToken, $shopName)
+    public function __construct($shopName, $logger = null)
     {
+        $this->logger = $logger;
         foreach ($this->resources() as $resource) {
             $className = 'Shopify\Shopify' . str_replace("_", "", ucwords($resource, "_"));
             $this->{$resource . "s"} = new $className($this);
         }
-        $this->setAccessToken($accessToken);
         $this->setShopName($shopName);
         $this->setHttpClient();
     }
@@ -69,7 +87,7 @@ class ShopifyClient
         return 'https://' . $this->shopName . '/admin/' . $resource . '.json';
     }
 
-    private function authHeaders()
+    protected function authHeaders()
     {
         return [
             'Content-Type: application/json',
@@ -93,6 +111,6 @@ class ShopifyClient
 
     public function setHttpClient(HttpRequestInterface $client = null)
     {
-        $this->httpClient = ($client ? $client : new CurlRequest());
+        $this->httpClient = ($client ? $client : new CurlRequest($this->logger));
     }
 }
