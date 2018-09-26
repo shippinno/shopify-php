@@ -6,8 +6,18 @@
 
 namespace Shopify;
 
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
+
 class CurlRequest implements HttpRequestInterface
 {
+    use LoggerAwareTrait;
+
+    public function __construct($logger = null)
+    {
+        $this->setLogger(is_null($logger) ? new NullLogger : $logger);
+    }
+
     public function request($method, $endpoint, array $headers = [], $payload = null, array $parameters = [])
     {
         if ($parameters) {
@@ -24,6 +34,14 @@ class CurlRequest implements HttpRequestInterface
         $this->setCurlOpt($ch, CURLOPT_RETURNTRANSFER, true);
         $this->setCurlOpt($ch, CURLOPT_HEADER, 1);
         $response = $this->execute($ch);
+        $this->logger->debug('Shopify response.', [
+            'url' => $endpoint,
+            'postFields' => $payload,
+            'headers' => $headers,
+            'response' => is_string($response) ?
+                substr(str_replace(["\r", "\n"], " ", $response), 0, 80) //too long
+                : $response
+        ]);
         return new CurlResponse($response);
     }
 
