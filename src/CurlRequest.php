@@ -34,15 +34,14 @@ class CurlRequest implements HttpRequestInterface
         $this->setCurlOpt($ch, CURLOPT_RETURNTRANSFER, true);
         $this->setCurlOpt($ch, CURLOPT_HEADER, 1);
         $response = $this->execute($ch);
-        $this->logger->debug('Shopify response.', [
-            'url' => $endpoint,
+        $curlResponse =  new CurlResponse($response);
+        $this->logger->debug('Shopify request&response.', [
+            'url' => $endpoint. ' ' . $method,
             'postFields' => $payload,
             'headers' => $headers,
-            'response' => is_string($response) ?
-                substr(str_replace(["\r", "\n"], " ", $response), 0, 80) //too long
-                : $response
+            'response' => $curlResponse->httpStatus().' : '.$curlResponse->body()
         ]);
-        return new CurlResponse($response);
+        return $curlResponse;
     }
 
     protected function execute($ch)
