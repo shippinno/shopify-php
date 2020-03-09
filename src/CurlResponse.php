@@ -11,11 +11,13 @@ class CurlResponse implements HttpResponseInterface
     private $headers;
     private $responseBody;
     private $status;
+    private $pageInfo = [];
 
     public function __construct($curlResponse)
     {
         $data = explode("\r\n\r\n", $curlResponse);
         $this->setHeaders($data);
+        $this->extractPageInfo();
         $this->responseBody = $data[1];
     }
 
@@ -72,5 +74,74 @@ class CurlResponse implements HttpResponseInterface
                 $this->headers[$pair[0]] = $pair[1];
             }
         }
+    }
+
+    private function extractPageInfo()
+    {
+        if (!isset($this->headers['Link'])) {
+            return [];
+        }
+        $links = [
+            'next' => null,
+            'previous' => null,
+        ];
+        foreach (array_keys($links) as $type) {
+            $matched = preg_match(
+                str_replace('{type}', $type, '/<(.*page_info=([a-z0-9\-]+).*)>; rel="?{type}"?/i'),
+                $this->headers['Link'],
+                $matches
+            );
+            if ($matched) {
+                $links[$type] = $matches[2];
+            }
+        }
+        $this->pageInfo = $links;
+    }
+
+    /**
+     * Get the next page of data.
+     *
+     * @return string
+     */
+    public function next()
+    {
+        if (!$this->hasNext()) {
+            throw new \RuntimeException("There's no next page");
+        }
+
+        return $this->pageInfo['next'];
+    }
+
+    /**
+     * Checks whether has next page.
+     *
+     * @return bool
+     */
+    public function hasNext()
+    {
+        return !empty($this->pageInfo['next']);
+    }
+
+    /**
+     * Get the previous page of data.
+     *
+     * @return string
+     */
+    public function prev()
+    {
+        if (!$this->hasPrev()) {
+            throw new \RuntimeException("There's no previous page");
+        }
+        return $this->pageInfo['previous'];
+    }
+
+    /**
+     * Checks whether has previous page.
+     *
+     * @return bool
+     */
+    public function hasPrev()
+    {
+        return !empty($this->pageInfo['previous']);
     }
 }
