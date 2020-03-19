@@ -87,7 +87,7 @@ class CurlResponse implements HttpResponseInterface
         ];
         foreach (array_keys($links) as $type) {
             $matched = preg_match(
-                str_replace('{type}', $type, '/<(.*page_info=([a-z0-9\-]+).*)>; rel="?{type}"?/i'),
+                str_replace('{type}', $type, '/<(.*page_info=([a-z0-9\-_]+).*)>; rel="?{type}"?/i'),
                 $this->headers['Link'],
                 $matches
             );
