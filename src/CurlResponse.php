@@ -78,7 +78,7 @@ class CurlResponse implements HttpResponseInterface
 
     private function extractPageInfo()
     {
-        if (!isset($this->headers['Link'])) {
+        if (!isset($this->headers['link'])) {
             return [];
         }
         $links = [
@@ -87,8 +87,8 @@ class CurlResponse implements HttpResponseInterface
         ];
         foreach (array_keys($links) as $type) {
             $matched = preg_match(
-                str_replace('{type}', $type, '/<(.*page_info=([a-z0-9\-]+).*)>; rel="?{type}"?/i'),
-                $this->headers['Link'],
+                str_replace('{type}', $type, '/<(.*page_info=([a-z0-9\-_]+).*)>; rel="?{type}"?/i'),
+                $this->headers['link'],
                 $matches
             );
             if ($matched) {

@@ -26,6 +26,7 @@ class ShopifyOrder extends ShopifyObject
                 throw new \InvalidArgumentException('Version string must be of YYYY-MM or unstable');
             }
             $resource = join(DIRECTORY_SEPARATOR, ['api', $options['apiVersion'], self::PLURAL]);
+            unset($options['apiVersion']);
         } else {
             $resource = static::PLURAL;
         }
