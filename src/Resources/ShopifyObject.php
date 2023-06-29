@@ -19,12 +19,12 @@ class ShopifyObject
 
     /**
      * @param ShopifyClient $client
-     * @param string $version
+     * @param string|null $apiVersion
      */
-    public function __construct(ShopifyClient $client, ?string $apiVersion = null)
+    public function __construct(ShopifyClient $client, $apiVersion = null)
     {
         $this->client = $client;
-        $this->apiVersion = $apiVersion;
+        $this->apiVersion = isset($apiVersion) ? $apiVersion : '2023-01';
     }
 
     protected function get($id, $prefix = '')
@@ -66,7 +66,7 @@ class ShopifyObject
      * @param string $resource
      * @return string
      */
-    protected function buildResource(string $resource): string
+    protected function buildResource($resource)
     {
         if (isset($this->apiVersion)) {
             return join(DIRECTORY_SEPARATOR, [

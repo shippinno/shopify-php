@@ -7,6 +7,7 @@
 namespace Shopify\Resources;
 
 use Shopify\Countable;
+use Shopify\ShopifyOrder;
 
 class Fulfillment extends ShopifyObject
 {

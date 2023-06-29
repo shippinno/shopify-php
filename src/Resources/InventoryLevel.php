@@ -17,7 +17,7 @@ class InventoryLevel extends ShopifyObject
      * @param string $locationId
      * @return mixed
      */
-    public function readLocationLevels(string $locationId)
+    public function readLocationLevels($locationId)
     {
         $resource = $this->buildResource('locations' . DIRECTORY_SEPARATOR . $locationId . DIRECTORY_SEPARATOR . static::PLURAL);
 
@@ -25,8 +25,7 @@ class InventoryLevel extends ShopifyObject
     }
 
     /**
-     * @param $data
-     * @param string $version
+     * @param array $data
      * @return mixed
      */
     public function setLocationLevels(array $data)
