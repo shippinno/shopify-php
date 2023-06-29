@@ -8,8 +8,12 @@ namespace Shopify;
 
 trait CommonRead
 {
-    public function read($id)
+    public function read($id, $apiVersion = null)
     {
-        return $this->get($id);
+        $prefix = '';
+        if (isset($apiVersion)) {
+            $prefix = join(DIRECTORY_SEPARATOR, ['api', $apiVersion, '']);
+        }
+        return $this->get($id, $prefix);
     }
 }
