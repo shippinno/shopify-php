@@ -6,7 +6,9 @@
 
 namespace Shopify;
 
-class ShopifyShopTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class ShopifyShopTest extends TestCase
 {
     public function testRead()
     {

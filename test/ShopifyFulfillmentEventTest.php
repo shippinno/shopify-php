@@ -6,11 +6,13 @@
 
 namespace Shopify;
 
-class ShopifyFulfillmentEventTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class ShopifyFulfillmentEventTest extends TestCase
 {
     private $mockClient;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockClient = $this->getMockBuilder('Shopify\ShopifyClient')
             ->setConstructorArgs(['abc', '040350450399894.myshopify.com'])

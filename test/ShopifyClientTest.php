@@ -6,64 +6,74 @@
 
 namespace Shopify;
 
-class ShopifyClientTest extends \PHPUnit_Framework_TestCase
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+
+class ShopifyClientTest extends TestCase
 {
     /**
-     * @expectedException     InvalidArgumentException
+     * @expectException     InvalidArgumentException
      */
     public function testSetShopnameTooManyPeriods()
     {
+        $this->expectException(InvalidArgumentException::class);
         new ShopifyClient("abc", "too.many.periods.myshopify.com");
     }
 
     /**
-     * @expectedException     InvalidArgumentException
+     * @expectException     InvalidArgumentException
      */
     public function testSetShopnameWithInvalidCharacters()
     {
+        $this->expectException(InvalidArgumentException::class);
         new ShopifyClient("abc", "to*&^%$'abc.myshopify.com");
     }
 
     /**
-     * @expectedException     InvalidArgumentException
+     * @expectException     InvalidArgumentException
      */
     public function testSetShopnameTooShort()
     {
+        $this->expectException(InvalidArgumentException::class);
         new ShopifyClient("abc", "abc.myshopify.com");
     }
 
     /**
-     * @expectedException     InvalidArgumentException
+     * @expectException     InvalidArgumentException
      */
     public function testSetShopnameTooLong()
     {
         $longString = "1234567890abcdefghijklmnopqrstuvwxyz";
         $shopName = $longString . $longString . $longString;
+        $this->expectException(InvalidArgumentException::class);
         $this->assertEquals(true, strlen($shopName) > 100);
         new ShopifyClient($shopName, ".myshopify.com");
     }
 
     /**
-     * @expectedException     InvalidArgumentException
+     * @expectException     InvalidArgumentException
      */
     public function testSetShopnameNotMyshopify()
     {
+        $this->expectException(InvalidArgumentException::class);
         new ShopifyClient("abfc3re34wr43f5g2dgf432", "josh.joshstore.com");
     }
 
     /**
-     * @expectedException     InvalidArgumentException
+     * @expectException     InvalidArgumentException
      */
     public function testSetInvalidAccessToken()
     {
+        $this->expectException(InvalidArgumentException::class);
         new ShopifyClient("abc", "040350450399894.myshopify.com");
     }
 
     /**
-     * @expectedException     InvalidArgumentException
+     * @expectException     InvalidArgumentException
      */
     public function testRequestOnlyAcceptsValidMethods()
     {
+        $this->expectException(InvalidArgumentException::class);
         $client = new ShopifyClient("abc", "040350450399894.myshopify.com");
         $client->call("OPTIONS", "https://040350450399894.myshopify.com/admin/products.json", null, null);
     }

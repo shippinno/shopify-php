@@ -45,13 +45,14 @@ class ShopifyClient
         ];
     }
 
-    public function __construct($shopName, $logger = null)
+    public function __construct($accessToken, $shopName, $logger = null)
     {
         $this->logger = $logger;
         foreach ($this->resources() as $resource) {
             $className = 'Shopify\Shopify' . str_replace("_", "", ucwords($resource, "_"));
             $this->{$resource . "s"} = new $className($this);
         }
+        $this->setAccessToken($accessToken);
         $this->setShopName($shopName);
         $this->setHttpClient();
     }

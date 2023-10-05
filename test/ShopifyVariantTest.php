@@ -6,13 +6,15 @@
 
 namespace Shopify;
 
+use PHPUnit\Framework\TestCase;
+
 require 'mock/MockRequest.php';
 
-class ShopifyVariantTest extends \PHPUnit_Framework_TestCase
+class ShopifyVariantTest extends TestCase
 {
     private $mockClient;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockClient = $this->getMockBuilder('Shopify\ShopifyClient')
             ->setConstructorArgs(['abc', '040350450399894.myshopify.com'])

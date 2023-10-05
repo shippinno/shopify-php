@@ -6,7 +6,9 @@
 
 namespace Shopify;
 
-class CurlRequestTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class CurlRequestTest extends TestCase
 {
     public function testRequest()
     {
